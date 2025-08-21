@@ -3,7 +3,7 @@
 // Music class implementation
 Music::Music(const std::string& name, const std::string& artist, 
              const std::string& album, const std::string& genre)
-    : name(name), artist(artist), album(album), genre(genre), playCount(0) {}
+    : name(name), artist(artist), album(album), genre(genre), playCount(0), rating(3), mood("neutro") {}
 
 void Music::play() {
     playCount++;
@@ -11,8 +11,10 @@ void Music::play() {
 }
 
 void Music::displayInfo() const {
+    std::string stars = std::string(rating, '⭐');
     std::cout << "🎵 " << name << " | " << artist << " | " << album 
-              << " | " << genre << " | Tocou: " << playCount << " vezes" << std::endl;
+              << " | " << genre << " | " << stars << " | 😊" << mood 
+              << " | Tocou: " << playCount << " vezes" << std::endl;
 }
 
 // Artist class implementation
@@ -45,6 +47,22 @@ void MusicRecommendationSystem::addMusic(const std::string& name, const std::str
     artistObj->addSong(newMusic);
     
     std::cout << "✅ Música cadastrada com sucesso: " << name << " - " << artist << " 🎉" << std::endl;
+}
+
+void MusicRecommendationSystem::addMusicWithDetails(const std::string& name, const std::string& artist,
+                                                   const std::string& album, const std::string& genre,
+                                                   int rating, const std::string& mood) {
+    musicLibrary.emplace_back(name, artist, album, genre);
+    Music* newMusic = &musicLibrary.back();
+    newMusic->setRating(rating);
+    newMusic->setMood(mood);
+    
+    Artist* artistObj = findOrCreateArtist(artist);
+    artistObj->addSong(newMusic);
+    
+    std::string stars = std::string(rating, '⭐');
+    std::cout << "✅ Música completa cadastrada: " << name << " - " << artist 
+              << " | " << stars << " | 😊" << mood << " 🎉" << std::endl;
 }
 
 void MusicRecommendationSystem::playMusic(const std::string& musicName) {
@@ -153,6 +171,15 @@ std::string MusicRecommendationSystem::getMostPlayedGenre() {
                                     [](const auto& a, const auto& b) { return a.second < b.second; });
     
     return maxGenre->first;
+}
+
+std::string MusicRecommendationSystem::getMostPlayedMood() {
+    if (moodPlayCount.empty()) return "Ainda nenhum";
+    
+    auto maxMood = std::max_element(moodPlayCount.begin(), moodPlayCount.end(),
+                                   [](const auto& a, const auto& b) { return a.second < b.second; });
+    
+    return maxMood->first;
 }
 
 void MusicRecommendationSystem::displayAllMusic() const {
@@ -310,6 +337,7 @@ void MusicRecommendationSystem::updatePlayCounts(const Music& music) {
     artistPlayCount[music.getArtist()]++;
     albumPlayCount[music.getAlbum()]++;
     genrePlayCount[music.getGenre()]++;
+    moodPlayCount[music.getMood()]++;
 }
 
 Music* MusicRecommendationSystem::findMusic(const std::string& musicName) {
