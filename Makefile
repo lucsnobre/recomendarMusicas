@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 TARGET = music_system
-SOURCES = main.cpp music_system.cpp menu.cpp
+SOURCES = main.cpp music_system.cpp menu.cpp extended_features.cpp lua_bridge.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Default target
