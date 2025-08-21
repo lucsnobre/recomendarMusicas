@@ -7,12 +7,12 @@ Music::Music(const std::string& name, const std::string& artist,
 
 void Music::play() {
     playCount++;
-    std::cout << "🎵 Tocando: " << name << " - " << artist << std::endl;
+    std::cout << "🎵 Tocando agora: " << name << " - " << artist << " 🎶" << std::endl;
 }
 
 void Music::displayInfo() const {
     std::cout << "🎵 " << name << " | " << artist << " | " << album 
-              << " | " << genre << " | Reproduções: " << playCount << std::endl;
+              << " | " << genre << " | Tocou: " << playCount << " vezes" << std::endl;
 }
 
 // Artist class implementation
@@ -31,8 +31,8 @@ int Artist::getTotalPlays() const {
 }
 
 void Artist::displayInfo() const {
-    std::cout << "🎤 Artista: " << name << " | Músicas: " << songs.size() 
-              << " | Total de reproduções: " << getTotalPlays() << std::endl;
+    std::cout << "🎤 Artista: " << name << " | Tem " << songs.size() << " música(s)"
+              << " | Tocou " << getTotalPlays() << " vezes no total" << std::endl;
 }
 
 // MusicRecommendationSystem implementation
@@ -44,7 +44,7 @@ void MusicRecommendationSystem::addMusic(const std::string& name, const std::str
     Artist* artistObj = findOrCreateArtist(artist);
     artistObj->addSong(newMusic);
     
-    std::cout << "✅ Música adicionada: " << name << " - " << artist << std::endl;
+    std::cout << "✅ Música cadastrada com sucesso: " << name << " - " << artist << " 🎉" << std::endl;
 }
 
 void MusicRecommendationSystem::playMusic(const std::string& musicName) {
@@ -53,7 +53,7 @@ void MusicRecommendationSystem::playMusic(const std::string& musicName) {
         music->play();
         updatePlayCounts(*music);
     } else {
-        std::cout << "❌ Música não encontrada: " << musicName << std::endl;
+        std::cout << "❌ Eita, não achei essa música: " << musicName << " 😅" << std::endl;
     }
 }
 
@@ -147,7 +147,7 @@ std::vector<std::pair<std::string, int>> MusicRecommendationSystem::getFavoriteA
 }
 
 std::string MusicRecommendationSystem::getMostPlayedGenre() {
-    if (genrePlayCount.empty()) return "Nenhum";
+    if (genrePlayCount.empty()) return "Ainda nenhum";
     
     auto maxGenre = std::max_element(genrePlayCount.begin(), genrePlayCount.end(),
                                     [](const auto& a, const auto& b) { return a.second < b.second; });
@@ -156,11 +156,11 @@ std::string MusicRecommendationSystem::getMostPlayedGenre() {
 }
 
 void MusicRecommendationSystem::displayAllMusic() const {
-    std::cout << "\n📚 BIBLIOTECA MUSICAL:\n";
+    std::cout << "\n📚 SUA BIBLIOTECA MUSICAL:\n";
     std::cout << std::string(50, '-') << std::endl;
     
     if (musicLibrary.empty()) {
-        std::cout << "Nenhuma música cadastrada.\n" << std::endl;
+        std::cout << "Opa, ainda não tem nenhuma música cadastrada! 🤷‍♂️\n" << std::endl;
         return;
     }
     
@@ -171,12 +171,12 @@ void MusicRecommendationSystem::displayAllMusic() const {
 }
 
 void MusicRecommendationSystem::displayStatistics() const {
-    std::cout << "\n📊 ESTATÍSTICAS:\n";
+    std::cout << "\n📊 SUAS ESTATÍSTICAS:\n";
     std::cout << std::string(50, '-') << std::endl;
     
     // Most played songs
     auto mostPlayed = const_cast<MusicRecommendationSystem*>(this)->getMostPlayedSongs(5);
-    std::cout << "🏆 Top 5 Músicas Mais Tocadas:\n";
+    std::cout << "🏆 Top 5 - As que você mais curte:\n";
     for (size_t i = 0; i < mostPlayed.size(); ++i) {
         std::cout << (i + 1) << ". " << mostPlayed[i]->getName() 
                   << " - " << mostPlayed[i]->getArtist() 
@@ -185,25 +185,25 @@ void MusicRecommendationSystem::displayStatistics() const {
     
     // Favorite artists
     auto favoriteArtists = const_cast<MusicRecommendationSystem*>(this)->getFavoriteArtists(5);
-    std::cout << "\n🎤 Top 5 Artistas Favoritos:\n";
+    std::cout << "\n🎤 Top 5 - Seus artistas favoritos:\n";
     for (size_t i = 0; i < favoriteArtists.size(); ++i) {
         std::cout << (i + 1) << ". " << favoriteArtists[i].first 
                   << " (" << favoriteArtists[i].second << " plays)\n";
     }
     
     // Most played genre
-    std::cout << "\n🎸 Gênero Mais Ouvido: " << const_cast<MusicRecommendationSystem*>(this)->getMostPlayedGenre() << std::endl;
+    std::cout << "\n🎸 O estilo que você mais curte: " << const_cast<MusicRecommendationSystem*>(this)->getMostPlayedGenre() << std::endl;
     std::cout << std::endl;
 }
 
 void MusicRecommendationSystem::displayRecommendations() {
-    std::cout << "\n💡 RECOMENDAÇÕES:\n";
+    std::cout << "\n💡 RECOMENDAÇÕES PARA VOCÊ:\n";
     std::cout << std::string(50, '-') << std::endl;
     
     auto artistRecs = recommendByArtist(3);
-    std::cout << "🎤 Baseado em artistas favoritos:\n";
+    std::cout << "🎤 Baseado nos seus artistas favoritos:\n";
     if (artistRecs.empty()) {
-        std::cout << "Nenhuma recomendação disponível.\n";
+        std::cout << "Poxa, não tenho sugestões agora! Toca mais música aí! 😄\n";
     } else {
         for (const auto& music : artistRecs) {
             std::cout << "• " << music->getName() << " - " << music->getArtist() << std::endl;
@@ -211,9 +211,9 @@ void MusicRecommendationSystem::displayRecommendations() {
     }
     
     auto albumRecs = recommendByAlbum(3);
-    std::cout << "\n💿 Baseado em álbuns favoritos:\n";
+    std::cout << "\n💿 Baseado nos seus álbuns favoritos:\n";
     if (albumRecs.empty()) {
-        std::cout << "Nenhuma recomendação disponível.\n";
+        std::cout << "Nada por aqui ainda! 🤷‍♂️\n";
     } else {
         for (const auto& music : albumRecs) {
             std::cout << "• " << music->getName() << " - " << music->getAlbum() << std::endl;
@@ -221,9 +221,9 @@ void MusicRecommendationSystem::displayRecommendations() {
     }
     
     auto genreRecs = recommendByGenre(3);
-    std::cout << "\n🎸 Baseado em gêneros favoritos:\n";
+    std::cout << "\n🎸 Baseado no seu estilo favorito:\n";
     if (genreRecs.empty()) {
-        std::cout << "Nenhuma recomendação disponível.\n";
+        std::cout << "Nenhuma dica por aqui! 😅\n";
     } else {
         for (const auto& music : genreRecs) {
             std::cout << "• " << music->getName() << " - " << music->getGenre() << std::endl;
@@ -246,13 +246,13 @@ void MusicRecommendationSystem::saveToFile(const std::string& filename) const {
     }
     
     file.close();
-    std::cout << "✅ Dados salvos em: " << filename << std::endl;
+    std::cout << "✅ Tudo salvo em: " << filename << " 💾" << std::endl;
 }
 
 void MusicRecommendationSystem::loadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "❌ Erro ao carregar arquivo: " << filename << std::endl;
+        std::cout << "❌ Ops, não consegui abrir o arquivo: " << filename << " 😔" << std::endl;
         return;
     }
     
@@ -292,7 +292,7 @@ void MusicRecommendationSystem::loadFromFile(const std::string& filename) {
     }
     
     file.close();
-    std::cout << "✅ Dados carregados de: " << filename << std::endl;
+    std::cout << "✅ Dados carregados de: " << filename << " 🎉" << std::endl;
 }
 
 Artist* MusicRecommendationSystem::findOrCreateArtist(const std::string& artistName) {

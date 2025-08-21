@@ -8,12 +8,12 @@ int main() {
     
     MusicRecommendationSystem musicSystem;
     
-    std::cout << "🎵 Bem-vindo ao Sistema de Recomendação Musical! 🎵\n";
-    std::cout << "Este sistema permite cadastrar músicas, registrar reproduções\n";
-    std::cout << "e receber recomendações personalizadas baseadas no seu gosto musical.\n\n";
+    std::cout << "🎵 E aí! Bem-vindo ao seu sistema de música! 🎵\n";
+    std::cout << "Aqui você pode cadastrar suas músicas, tocar elas\n";
+    std::cout << "e ainda receber dicas personalizadas do que curtir!\n\n";
     
-    // Add some sample data for demonstration
-    std::cout << "📝 Adicionando algumas músicas de exemplo...\n";
+    // Adiciona algumas músicas de exemplo
+    std::cout << "📝 Vou colocar umas músicas de exemplo pra você...\n";
     musicSystem.addMusic("Bohemian Rhapsody", "Queen", "A Night at the Opera", "Rock");
     musicSystem.addMusic("Stairway to Heaven", "Led Zeppelin", "Led Zeppelin IV", "Rock");
     musicSystem.addMusic("Hotel California", "Eagles", "Hotel California", "Rock");
@@ -25,10 +25,10 @@ int main() {
     musicSystem.addMusic("Purple Haze", "Jimi Hendrix", "Are You Experienced", "Rock");
     musicSystem.addMusic("Yesterday", "The Beatles", "Help!", "Pop");
     
-    std::cout << "\n✅ Músicas de exemplo adicionadas!\n";
-    std::cout << "💡 Dica: Toque algumas músicas para ver as recomendações funcionarem!\n\n";
+    std::cout << "\n✅ Pronto! Coloquei umas músicas clássicas pra você!\n";
+    std::cout << "💡 Dica: Vai lá e toca algumas pra ver as recomendações funcionando!\n\n";
     
-    // Start interactive menu
+    // Inicia o menu interativo
     musicSystem.runInteractiveMenu();
     
     return 0;
